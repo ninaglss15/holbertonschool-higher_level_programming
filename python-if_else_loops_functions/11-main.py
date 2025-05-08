@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/pyhton3
 pow = __import__('11-pow').pow
 
 print(pow(2, 2))
