@@ -1,7 +1,8 @@
 #!/usr/bin/python3
-from add_0 import add
+import sys
 
+total = 0
 if __name__ == "__main__":
-    a = 1
-    b = 2
-    print(f"{a} + {b} = {add(a, b)}")
+    for i in range(1, len(sys.argv)):
+        total += int(sys.argv[i])
+    print(total)
