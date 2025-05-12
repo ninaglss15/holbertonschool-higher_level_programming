@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 
 def multiple_returns(sentence):
+    lu = 0
+    le = len(sentence)
     if sentence == "":
-        return None
+        lu = None
     else:
-        lenn = len(sentence)
-        return (lenn, sentence[0])
+        lu = sentence[0]
+        return (le, lu)
