@@ -6,5 +6,3 @@ def uniq_add(my_list=[]):
     for i in uniq:
         views += i
     return views
-
-
