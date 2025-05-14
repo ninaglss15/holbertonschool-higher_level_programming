@@ -1,11 +1,12 @@
 #!/usr/bin/pyhton3
 
 def safe_print_division(a, b):
-    res = None
+    result = None
     try:
-        res = a / b
+        result = a / b
     except ZeroDivisionError:
-        res = None
+        result = None
     finally:
-        print("Inside result: {}".format(res))
-    return res
+        print("Inside result: {}".format(result))
+
+    return result
