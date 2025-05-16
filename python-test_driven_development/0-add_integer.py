@@ -4,8 +4,8 @@
 
 
 def add_integer(a, b=98):
-    """Returns the sum of a and b as integers.
-    Floats are cast to ints. Raises TypeError if inputs are not int or float.
+    """
+    that adds 2 integer, transform float in to integer and handle wrong type
     """
     if not isinstance(a, (int, float)):
         raise TypeError("a must be an integer")

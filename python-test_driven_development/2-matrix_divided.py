@@ -3,8 +3,10 @@
 
 
 def matrix_divided(matrix, div):
-    """Returns a new matrix with all elements divided
-    by div, rounded to 2 decimals."""
+    """Returns a new matrix with all elements divided by div,
+    rounded to 2 decimals.
+    """
+
     if not isinstance(matrix, list) or not all(
         isinstance(row, list) for row in matrix
     ):
