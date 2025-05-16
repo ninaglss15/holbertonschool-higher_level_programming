@@ -1,0 +1,33 @@
+Doctests for text_indentation
+
+>>> text_indentation("Hello. How are you? Fine: great.")
+Hello.
+
+How are you?
+
+Fine:
+
+great.
+
+>>> text_indentation("Wait. This is a test. Okay?")
+Wait.
+
+This is a test.
+
+Okay?
+
+>>> text_indentation("Hello World")
+Hello World
+
+>>> text_indentation(123)
+Traceback (most recent call last):
+TypeError: text must be a string
+
+>>> text_indentation("A:B?C.D")
+A:
+
+B?
+
+C.
+
+D

@@ -1,0 +1,18 @@
+This is a doctest for say_my_name
+
+>>> say_my_name("John", "Smith")
+My name is John Smith
+
+>>> say_my_name("Alice")
+My name is Alice 
+
+>>> say_my_name("Nina", "R")
+My name is Nina R
+
+>>> say_my_name(123, "Smith")
+Traceback (most recent call last):
+TypeError: first_name must be a string
+
+>>> say_my_name("John", 456)
+Traceback (most recent call last):
+TypeError: last_name must be a string
