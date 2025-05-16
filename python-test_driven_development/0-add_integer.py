@@ -1,6 +1,9 @@
 #!/usr/bin/python3
+"""
+add_integer.py
 
-"""Module that provides a function to add two integers."""
+this module add 2 numbers
+"""
 
 
 def add_integer(a, b=98):
