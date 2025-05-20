@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Module qui définit une classe Square (carré) avec gestion de la taille et impression."""
+"""Module qui définit une classe Square."""
 
 
 class Square:
