@@ -1,67 +1,71 @@
 #!/usr/bin/env python3
 """
-RESTful API - Task 3: Basic HTTP Server with JSON responses using http.server
+RESTful API - Task 3: Basic HTTP server using Python's http.server
 
-This script sets up a simple HTTP server on port 8000,
-handles GET requests on specific endpoints,
-and returns text or JSON responses accordingly.
+This script creates a minimal HTTP server that handles GET requests,
+returns text or JSON responses depending on the requested path,
+and manages unknown endpoints with a 404 response.
 """
 
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 
 
-class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+class SimpleAPIHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         """
-        Handle GET requests for specific endpoints:
-        - "/" returns a welcome text message
-        - "/data" returns a JSON dataset
-        - "/status" returns a simple status message in JSON
-        - other paths return 404 Not Found
+        Process GET requests and route them to corresponding handlers
+        based on the request path.
         """
+
         if self.path == "/":
             self.send_response(200)
-            self.send_header("Content-type", "text/plain; charset=utf-8")
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
             self.end_headers()
             message = "Hello, this is a simple API!"
             self.wfile.write(message.encode("utf-8"))
 
         elif self.path == "/data":
             self.send_response(200)
-            self.send_header("Content-type", "application/json; charset=utf-8")
+            self.send_header("Content-Type", "application/json; charset=utf-8")
             self.end_headers()
-            data = {
+            payload = {
                 "name": "John",
                 "age": 30,
                 "city": "New York"
             }
-            json_data = json.dumps(data)
-            self.wfile.write(json_data.encode("utf-8"))
+            self.wfile.write(json.dumps(payload).encode("utf-8"))
 
         elif self.path == "/status":
             self.send_response(200)
-            self.send_header("Content-type", "application/json; charset=utf-8")
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
             self.end_headers()
-            status = {
-                "status": "OK"
+            self.wfile.write(b"OK")
+
+        elif self.path == "/info":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.end_headers()
+            info = {
+                "version": "1.0",
+                "description": "A simple API built with http.server"
             }
-            json_status = json.dumps(status)
-            self.wfile.write(json_status.encode("utf-8"))
+            self.wfile.write(json.dumps(info).encode("utf-8"))
 
         else:
             self.send_response(404)
-            self.send_header("Content-type", "text/plain; charset=utf-8")
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
             self.end_headers()
-            message = "Endpoint not found"
-            self.wfile.write(message.encode("utf-8"))
+            self.wfile.write(b"Endpoint not found")
 
 
-def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):
-    port = 8000
-    server_address = ("", port)
-    httpd = server_class(server_address, handler_class)
-    print(f"Starting http.server on port {port}...")
+def run_server(host="0.0.0.0", port=8000):
+    """
+    Initialize and start the HTTP server.
+    """
+    server_address = (host, port)
+    httpd = HTTPServer(server_address, SimpleAPIHandler)
+    print(f"Starting server at http://{host}:{port}")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
@@ -71,4 +75,4 @@ def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    run()
+    run_server()
