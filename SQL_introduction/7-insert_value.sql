@@ -1,4 +1,3 @@
--- script that inserts a new row in the table first_table
-
+-- script that inserts a new row in a table
 INSERT INTO first_table (id, name)
-VALUES (89, 'best shool');
+VALUES (89, 'Best School');
