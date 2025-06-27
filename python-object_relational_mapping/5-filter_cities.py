@@ -1,42 +1,31 @@
 #!/usr/bin/python3
-"""Lists all cities of a given state from the database hbtn_0e_4_usa"""
-
+"""
+This module connects to a MySQL database and retrieves data from
+the 'states' table.
+"""
 import MySQLdb
 import sys
 
-if __name__ == "__main__":
-    # Récupérer les arguments : user, password, dbname, state_name
-    user = sys.argv[1]
-    passwd = sys.argv[2]
-    dbname = sys.argv[3]
-    state_name = sys.argv[4]
 
-    # Connexion à la base de données
+if __name__ == "__main__":
+    user = sys.argv[1]
+    password = sys.argv[2]
+    database = sys.argv[3]
+    state = sys.argv[4]
+
     db = MySQLdb.connect(
         host="localhost",
-        port=3306,
         user=user,
-        passwd=passwd,
-        db=dbname
+        passwd=password,
+        db=database,
+        port=3306
     )
 
-    cur = db.cursor()
-
-    # Requête SQL sécurisée avec placeholder (%s) pour éviter injection
-    query = """
-        SELECT cities.name
-        FROM cities
-        JOIN states ON cities.state_id = states.id
-        WHERE states.name = %s
-        ORDER BY cities.id ASC
-    """
-    cur.execute(query, (state_name,))
-
-    # Récupérer tous les noms de villes
-    cities = [row[0] for row in cur.fetchall()]
-
-    # Afficher sous la forme demandée
-    print(", ".join(cities))
-
-    cur.close()
-    db.close()
+    cursor = db.cursor()
+    cursor.execute(
+        "SELECT cities.name FROM cities \
+        JOIN states ON cities.state_id = states.id \
+        WHERE states.name = %s ORDER BY cities.id;", (state,)
+    )
+    results = cursor.fetchall()
+    print(", ".join(result[0]for result in results))

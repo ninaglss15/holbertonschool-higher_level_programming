@@ -1,37 +1,30 @@
 #!/usr/bin/python3
-"""Safely displays all values in the states table where name matches the argument"""
+"""Script that safely filters states by name to avoid SQL injection"""
 
-import MySQLdb
 import sys
+import MySQLdb
 
 if __name__ == "__main__":
-    # Get credentials and search value from args
-    user = sys.argv[1]
-    passwd = sys.argv[2]
-    dbname = sys.argv[3]
+    username = sys.argv[1]
+    password = sys.argv[2]
+    db_name = sys.argv[3]
     state_name = sys.argv[4]
 
-    # Connect to the MySQL database
     db = MySQLdb.connect(
         host="localhost",
         port=3306,
-        user=user,
-        passwd=passwd,
-        db=dbname
+        user=username,
+        passwd=password,
+        db=db_name
     )
 
-    # Create cursor
-    cur = db.cursor()
-
-    # Use parameterized query to prevent SQL injection
+    cursor = db.cursor()
     query = "SELECT * FROM states WHERE name = %s ORDER BY id ASC"
-    cur.execute(query, (state_name,))
+    cursor.execute(query, (state_name,))
+    rows = cursor.fetchall()
 
-    # Fetch and print results
-    rows = cur.fetchall()
     for row in rows:
         print(row)
 
-    # Cleanup
-    cur.close()
+    cursor.close()
     db.close()

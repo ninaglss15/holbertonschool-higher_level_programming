@@ -1,37 +1,30 @@
 #!/usr/bin/python3
-"""Displays all values in the states table where name matches the argument"""
+"""Script that lists states matching a given name from the database"""
 
-import MySQLdb
 import sys
+import MySQLdb
 
 if __name__ == "__main__":
-    # Get arguments
-    user = sys.argv[1]
-    passwd = sys.argv[2]
-    dbname = sys.argv[3]
+    username = sys.argv[1]
+    password = sys.argv[2]
+    db_name = sys.argv[3]
     state_name = sys.argv[4]
 
-    # Connect to the database
     db = MySQLdb.connect(
         host="localhost",
         port=3306,
-        user=user,
-        passwd=passwd,
-        db=dbname
+        user=username,
+        passwd=password,
+        db=db_name
     )
 
-    # Create cursor
-    cur = db.cursor()
-    
-    # WARNING: format() used intentionally as required by the task (not safe in real-world apps)
-    query = "SELECT * FROM states WHERE name = '{}' ORDER BY id ASC".format(state_name)
-    cur.execute(query)
+    cursor = db.cursor()
+    query = "SELECT * FROM states WHERE BINARY name = '{}' ORDER BY id ASC".format(state_name)
+    cursor.execute(query)
+    rows = cursor.fetchall()
 
-    # Fetch and print results
-    rows = cur.fetchall()
     for row in rows:
         print(row)
 
-    # Cleanup
-    cur.close()
+    cursor.close()
     db.close()
