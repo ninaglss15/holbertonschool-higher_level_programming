@@ -1,36 +1,38 @@
 #!/usr/bin/python3
-"""Script that lists states matching a given name from the database"""
+"""
+Displays all values in the 'states' table of hbtn_0e_0_usa
+where name matches the argument exactly (case-sensitive).
+Uses MySQLdb and unsafe string formatting (intentional for the task).
+"""
 
-import sys
 import MySQLdb
-
+import sys
 
 if __name__ == "__main__":
     username = sys.argv[1]
     password = sys.argv[2]
-    db_name = sys.argv[3]
+    database = sys.argv[3]
     state_name = sys.argv[4]
 
-    # Connect to the database
     db = MySQLdb.connect(
         host="localhost",
         port=3306,
         user=username,
         passwd=password,
-        db=db_name
+        db=database
     )
 
-    cursor = db.cursor()
+    cur = db.cursor()
 
-    # Use parameterized query to prevent SQL injection
-    query = "SELECT * FROM states WHERE BINARY name = %s ORDER BY id ASC"
-    cursor.execute(query, (state_name,))
-    rows = cursor.fetchall()
+    query = (
+        "SELECT * FROM states "
+        "WHERE name LIKE BINARY '{}' "
+        "ORDER BY id ASC"
+    ).format(state_name)
+    cur.execute(query)
 
-    # Print results
-    for row in rows:
+    for row in cur.fetchall():
         print(row)
 
-    # Clean up
-    cursor.close()
+    cur.close()
     db.close()
