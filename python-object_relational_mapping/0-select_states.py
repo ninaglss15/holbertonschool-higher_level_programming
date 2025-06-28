@@ -1,21 +1,32 @@
 #!/usr/bin/python3
 """
-Module that lists all states from the database hbtn_0e_0_usa
+Lists all states from the database hbtn_0e_0_usa.
+Connects to a MySQL server using MySQLdb and fetches all rows
+from the 'states' table sorted by ascending id.
 """
 
-
-import sys
 import MySQLdb
-
+import sys
 
 if __name__ == "__main__":
+    username = sys.argv[1]
+    password = sys.argv[2]
+    database = sys.argv[3]
+
     db = MySQLdb.connect(
-        user=sys.argv[1],
-        passwd=sys.argv[2],
-        db=sys.argv[3],
-        port=3306
+        host="localhost",
+        port=3306,
+        user=username,
+        passwd=password,
+        db=database
     )
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM states")
-    for state in cursor.fetchall():
-        print(state)
+
+    cur = db.cursor()
+    cur.execute("SELECT * FROM states ORDER BY id ASC")
+
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
+
+    cur.close()
+    db.close()
