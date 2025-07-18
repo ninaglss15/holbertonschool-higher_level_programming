@@ -1,4 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+"""
+Flask app serving multiple HTML pages using Jinja templates.
+Each page includes reusable header and footer components.
+"""
 
 from flask import Flask, render_template
 
