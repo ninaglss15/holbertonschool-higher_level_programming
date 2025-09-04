@@ -5,9 +5,9 @@ if __name__ == "__main__":
     import sys
     argv = sys.argv
     argc = len(argv) - 1
-    if argc == 0:
+    if argc == 1:
         print("0 arguments:")
-    elif argc == 1:
+    elif argc == 2:
         print("1 arguents:")
     else:
         print("{} arguments:" .format(argc))
