@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Module that defines a Square class with size validation."""
 
 
 class Square:
@@ -16,12 +17,9 @@ class Square:
             ValueError: If size is less than 0.
         """
         if not isinstance(size, int):
-            # If size is not an integer, raise an error
             raise TypeError("size must be an integer")
 
         if size < 0:
-            # If size is negative, raise an error
             raise ValueError("size must be >= 0")
 
-        # Private instance attribute to store the square's size
         self.__size = size
