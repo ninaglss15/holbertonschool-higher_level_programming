@@ -1,8 +1,7 @@
 #!/usr/bin/python3
-"""
-This module defines a function that checks if an object
-is an instance of a class that inherited (directly or indirectly)
-from the specified class, but is not exactly an instance of that class.
+""""
+Provides a function that checks if an object is an instance of a class
+that inherited (directly or indirectly) from the specified class.
 """
 
 
