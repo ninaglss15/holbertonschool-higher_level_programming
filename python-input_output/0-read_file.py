@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+Module that contains a function to read a text file
+"""
 
 
 def read_file(filename=""):
@@ -10,7 +13,7 @@ def read_file(filename=""):
     output without adding an extra newline at the end.
 
     Args:
-        filename (str): The name of the file to read. Defaults to an empty string.
+        filename (str): The name of the file to read. Defaults to an empty
 
     Returns:
         None
