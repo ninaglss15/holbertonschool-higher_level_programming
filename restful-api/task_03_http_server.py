@@ -2,10 +2,11 @@
 """Simple API using http.server"""
 
 import json
-import http.server
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
-class SimpleAPIHandler(http.server.BaseHTTPRequestHandler):
+class SimpleAPIHandler(BaseHTTPRequestHandler):
+    """Handles GET requests for a simple API"""
 
     def do_GET(self):
         """Handle GET requests"""
@@ -23,11 +24,10 @@ class SimpleAPIHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(data).encode())
 
         elif self.path == "/status":
-            response = {"status": "OK"}
             self.send_response(200)
-            self.send_header("Content-type", "application/json")
+            self.send_header("Content-type", "text/plain")
             self.end_headers()
-            self.wfile.write(json.dumps(response).encode())
+            self.wfile.write(b"OK")
 
         elif self.path == "/info":
             info = {"version": "1.0",
@@ -38,17 +38,16 @@ class SimpleAPIHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(info).encode())
 
         else:
-            error = {"error": "Endpoint not found"}
             self.send_response(404)
-            self.send_header("Content-type", "application/json")
+            self.send_header("Content-type", "text/plain")
             self.end_headers()
-            self.wfile.write(json.dumps(error).encode())
+            self.wfile.write(b"Endpoint not found")
 
 
-def run(server_class=http.server.HTTPServer,
-        handler_class=SimpleAPIHandler):
+def run():
+    """Run the HTTP server on port 8000"""
     server_address = ("", 8000)
-    httpd = server_class(server_address, handler_class)
+    httpd = HTTPServer(server_address, SimpleAPIHandler)
     print("🚀 Server running on http://localhost:8000")
     httpd.serve_forever()
 
