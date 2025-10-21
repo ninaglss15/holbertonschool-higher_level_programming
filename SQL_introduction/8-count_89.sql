@@ -3,6 +3,6 @@
 -- COUNT(*) is an aggregation function that counts all rows matching the condition
 -- AS allows you to give a name (alias) to the resulting column
 -- WHERE filters the rows to include only those that meet the specified condition
-SELECT COUNT(*) AS alias_name
-FROM table_name
-WHERE condition;
+SELECT COUNT(*) AS first_table
+FROM first_table
+WHERE id = 89;
