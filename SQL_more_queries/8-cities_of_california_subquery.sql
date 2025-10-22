@@ -3,7 +3,7 @@
 -- Utilise une sous-requête pour récupérer l'id de California depuis la table states
 -- Trie les résultats par id en ordre croissant
 
-SELECT id, name
-FROM cities
-WHERE state_id = (SELECT id FROM states WHERE name = 'California')
-ORDER BY id ASC;
+SELECT cities.id, cities.name
+FROM states, cities
+WHERE states.id = cities.state_id AND states.name = 'California'
+ORDER BY cities.id;
