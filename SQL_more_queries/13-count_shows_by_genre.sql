@@ -1,0 +1,21 @@
+-- Affiche deux colonnes :
+    --genre             : nom du genre
+    --number_of_shows   : nombre de séries liées à ce genre
+-- N’affiche que les genres qui ont au moins une série associée
+-- Résultats triés par nombre de séries décroissant
+-- Utilise un seul SELECT
+-- La requête relie genres et tv_show_genres, puis compte le nombre de séries
+
+SELECT 
+    genres.name AS genre,
+    COUNT(tv_show_genres.show_id) AS number_of_shows
+FROM 
+    genres
+JOIN 
+    tv_show_genres
+ON 
+    genres.id = tv_show_genres.genre_id
+GROUP BY 
+    genres.name
+ORDER BY 
+    number_of_shows DESC;
