@@ -1,38 +1,23 @@
 #!/usr/bin/python3
 """
-Module pour lister tous les états de la base de données hbtn_0e_0_usa.
-
-Ce script se connecte à MySQL et récupère tous les états triés par ID.
-Utilise MySQLdb pour la connexion à la base de données.
-Arguments: mysql_username mysql_password database_name
+Script that lists all states from the database hbtn_0e_0_usa
 """
-
 import MySQLdb
 import sys
 
 
-def main():
-    """
-    Fonction principale qui se connecte à MySQL et affiche tous les états.
+if __name__ == "__main__":
+    user = sys.argv[1]
+    password = sys.argv[2]
+    db_name = sys.argv[3]
 
-    Prend 3 arguments de ligne de commande:
-    - sys.argv[1]: nom d'utilisateur MySQL
-    - sys.argv[2]: mot de passe MySQL
-    - sys.argv[3]: nom de la base de données
-
-    Affiche tous les états triés par states.id en ordre croissant.
-    """
-    db = MySQLdb.connect(
-        host="localhost",
-        user=sys.argv[1],
-        passwd=sys.argv[2],
-        db=sys.argv[3]
-    )
-
+    # Connect to the MySQL server on localhost:3306
+    db = MySQLdb.connect(host="localhost", port=3306,
+                         user=user, passwd=password, db=db_name)
     cur = db.cursor()
 
+    # Execute query and fetch results sorted by id (ascending)
     cur.execute("SELECT * FROM states ORDER BY id ASC")
-
     rows = cur.fetchall()
 
     for row in rows:
@@ -40,7 +25,3 @@ def main():
 
     cur.close()
     db.close()
-
-
-if __name__ == "__main__":
-    main()
