@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Safe filter: displays all values in states where name matches the argument."""
+"""Safe filter: displays all."""
 
 import MySQLdb
 import sys
@@ -20,7 +20,12 @@ if __name__ == "__main__":
     )
 
     cur = db.cursor()
-    cur.execute("SELECT * FROM states WHERE name = %s ORDER BY id ASC", (state_name,))
+    cur.execute(
+        "SELECT * FROM states "
+        "WHERE name = %s "
+        "ORDER BY id ASC",
+        (state_name,)
+    )
     rows = cur.fetchall()
     for row in rows:
         print(row)

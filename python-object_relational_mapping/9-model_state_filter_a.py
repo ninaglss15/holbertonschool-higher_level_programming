@@ -1,27 +1,34 @@
 #!/usr/bin/python3
-"""Lists all State objects that contain the letter 'a' from hbtn_0e_6_usa."""
+"""Safe filter: displays all ."""
 
+import MySQLdb
 import sys
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
-from model_state import Base, State
 
 
 if __name__ == "__main__":
-    user = sys.argv[1]
-    pwd = sys.argv[2]
-    dbname = sys.argv[3]
+    username = sys.argv[1]
+    password = sys.argv[2]
+    database = sys.argv[3]
+    state_name = sys.argv[4]
 
-    engine = create_engine(
-        'mysql+mysqldb://{}:{}@localhost/{}'.format(user, pwd, dbname),
-        pool_pre_ping=True
+    db = MySQLdb.connect(
+        host="localhost",
+        port=3306,
+        user=username,
+        passwd=password,
+        db=database
     )
 
-    Base.metadata.create_all(engine)
-    session = Session(engine)
+    cur = db.cursor()
+    cur.execute(
+        "SELECT * FROM states "
+        "WHERE name = %s "
+        "ORDER BY id ASC",
+        (state_name,)
+    )
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
 
-    states = session.query(State).filter(State.name.like("%a%")).order_by(State.id).all()
-    for state in states:
-        print(f"{state.id}: {state.name}")
-
-    session.close()
+    cur.close()
+    db.close()
