@@ -1,11 +1,12 @@
 #!/usr/bin/node
-const args = process.argv.slice(2).map(n => parseInt(n));
-
-if (args.length < 2) {
+const argv = process.argv;
+if (argv.length <= 3) {
   console.log(0);
 } else {
-  let max = Math.max(...args);
-  let filtered = args.filter(n => n !== max);
-  let secondMax = filtered.length > 0 ? Math.max(...filtered) : 0;
-  console.log(secondMax);
+  const nums = [];
+  for (let i = 2; i < argv.length; i++) {
+    nums.push(parseInt(argv[i]));
+  }
+  nums.sort((a, b) => b - a);
+  console.log(nums[1]);
 }
