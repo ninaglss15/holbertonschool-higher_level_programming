@@ -6,4 +6,3 @@ fetch(url)
   .then(data => {
     character.textContent = data.name;
   })
-  .catch(err => console.log('Erreur :', err));
