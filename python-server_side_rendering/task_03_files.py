@@ -50,44 +50,46 @@ def products():
     source = request.args.get('source')
     product_id = request.args.get('id')
     products_list = []
+    error = None
 
+    # Validate source parameter
+    if source not in ['json', 'csv']:
+        error = "Wrong source"
+        return render_template('product_display.html', error=error)
+
+    # Read data from JSON file
     if source == 'json':
         try:
             with open('products.json', 'r') as json_file:
                 products_list = json.load(json_file)
         except FileNotFoundError:
-            return render_template('product_display.html',
-                                   error="JSON file not found")
+            error = "JSON file not found"
+            return render_template('product_display.html', error=error)
+
+    # Read data from CSV file
     elif source == 'csv':
         try:
             with open('products.csv', 'r') as csv_file:
                 reader = csv.DictReader(csv_file)
-                products_list = []
                 for row in reader:
                     row['id'] = int(row['id'])
                     row['price'] = float(row['price'])
                     products_list.append(row)
         except FileNotFoundError:
-            return render_template('product_display.html',
-                                   error="CSV file not found")
-    else:
-        return render_template('product_display.html',
-                               error="Wrong source")
+            error = "CSV file not found"
+            return render_template('product_display.html', error=error)
 
+    # Filter by product ID if provided
     if product_id:
         try:
             product_id = int(product_id)
-            filtered_products = [
-                p for p in products_list
-                if p['id'] == product_id
-            ]
-            if not filtered_products:
-                return render_template('product_display.html',
-                                       error="Product not found")
-            products_list = filtered_products
+            products_list = [p for p in products_list if p['id'] == product_id]
+            if not products_list:
+                error = "Product not found"
+                return render_template('product_display.html', error=error)
         except ValueError:
-            return render_template('product_display.html',
-                                   error="Invalid product ID")
+            error = "Invalid product ID"
+            return render_template('product_display.html', error=error)
 
     return render_template('product_display.html', products=products_list)
 
