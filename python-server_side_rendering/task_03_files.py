@@ -2,7 +2,6 @@
 """
 Displaying Data from JSON or CSV Files in Flask
 """
-
 from flask import Flask, render_template, request
 import json
 import csv
@@ -69,21 +68,16 @@ def products():
     if product_id:
         try:
             product_id = int(product_id)
-            products_list = [
-                product for product in products_list if product['id']
-                == product_id]
-            if not products_list:
-                return render_template(
-                    'product_display.html',
-                    error="Product not found")
+            filtered_products = [p for p in products_list if p['id'] == product_id]
+            if not filtered_products:
+                return render_template('product_display.html',
+                                       error="Product not found")
+            products_list = filtered_products
         except ValueError:
             return render_template('product_display.html',
                                    error="Invalid product ID")
+    
     return render_template('product_display.html', products=products_list)
-
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
 
 
 if __name__ == '__main__':
