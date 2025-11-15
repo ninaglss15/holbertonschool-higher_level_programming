@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
-"""
-Displaying Data from JSON or CSV Files in Flask
-"""
+#!/usr/bin/python3
+"""Flask application for product display from JSON and CSV files."""
+
 from flask import Flask, render_template, request
 import json
 import csv
@@ -38,20 +37,30 @@ def items():
 
 @app.route('/products')
 def products():
+    """
+    Display products from JSON or CSV source.
+
+    Query parameters:
+        source (str): Data source ('json' or 'csv')
+        id (int, optional): Product ID to filter
+
+    Returns:
+        Rendered template with products or error message
+    """
     source = request.args.get('source')
     product_id = request.args.get('id')
     products_list = []
 
     if source == 'json':
         try:
-            with open('products.json') as json_file:
+            with open('products.json', 'r') as json_file:
                 products_list = json.load(json_file)
         except FileNotFoundError:
             return render_template('product_display.html',
                                    error="JSON file not found")
     elif source == 'csv':
         try:
-            with open('products.csv') as csv_file:
+            with open('products.csv', 'r') as csv_file:
                 reader = csv.DictReader(csv_file)
                 products_list = []
                 for row in reader:
@@ -68,7 +77,10 @@ def products():
     if product_id:
         try:
             product_id = int(product_id)
-            filtered_products = [p for p in products_list if p['id'] == product_id]
+            filtered_products = [
+                p for p in products_list
+                if p['id'] == product_id
+            ]
             if not filtered_products:
                 return render_template('product_display.html',
                                        error="Product not found")
@@ -76,7 +88,7 @@ def products():
         except ValueError:
             return render_template('product_display.html',
                                    error="Invalid product ID")
-    
+
     return render_template('product_display.html', products=products_list)
 
 
