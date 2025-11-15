@@ -10,65 +10,80 @@ import csv
 app = Flask(__name__)
 
 
+@app.route('/')
+def home():
+    """Home page route."""
+    return render_template('index.html')
+
+
+@app.route('/about')
+def about():
+    """About page route."""
+    return render_template('about.html')
+
+
+@app.route('/contact')
+def contact():
+    """Contact page route."""
+    return render_template('contact.html')
+
+
+@app.route('/items')
+def items():
+    """Items page route."""
+    with open('items.json', 'r') as f:
+        data = json.load(f)
+        items_list = data.get('items', [])
+    return render_template('items.html', items=items_list)
+
+
 @app.route('/products')
 def products():
+    source = request.args.get('source')
+    product_id = request.args.get('id')
+    products_list = []
 
-    source = request.args.get("source", "").lower()
-    products = []
-    error = None
-
-    # --- LECTURE DES FICHIERS ---
-    try:
-        if source == "json":
-            with open("products.json", "r", encoding="utf-8") as f:
-                products = json.load(f)
-
-        elif source == "csv":
-            with open("products.csv", newline="", encoding="utf-8") as f:
-                reader = csv.DictReader(f)
-                products = []
+    if source == 'json':
+        try:
+            with open('products.json') as json_file:
+                products_list = json.load(json_file)
+        except FileNotFoundError:
+            return render_template('product_display.html',
+                                   error="JSON file not found")
+    elif source == 'csv':
+        try:
+            with open('products.csv') as csv_file:
+                reader = csv.DictReader(csv_file)
+                products_list = []
                 for row in reader:
-                    products.append({
-                        "id": int(row["id"]),
-                        "name": row["name"],
-                        "category": row["category"],
-                        "price": float(row["price"])
-                    })
+                    row['id'] = int(row['id'])
+                    row['price'] = float(row['price'])
+                    products_list.append(row)
+        except FileNotFoundError:
+            return render_template('product_display.html',
+                                   error="CSV file not found")
+    else:
+        return render_template('product_display.html',
+                               error="Wrong source")
 
-        else:
-            error = "Wrong source"
-
-    except Exception as e:
-        error = "Erreur lors du chargement des données : {}".format(e)
-
-    # --- FILTRAGE PAR ID ---
-    product_id = request.args.get("id")
-
-    if product_id and not error:
+    if product_id:
         try:
             product_id = int(product_id)
-
-            found = None
-            for product in products:
-                if int(product["id"]) == product_id:
-                    found = product
-                    break
-
-            if found:
-                products = [found]
-            else:
-                error = "Product not found"
-                products = []
-
+            products_list = [
+                product for product in products_list if product['id']
+                == product_id]
+            if not products_list:
+                return render_template(
+                    'product_display.html',
+                    error="Product not found")
         except ValueError:
-            error = "Invalid ID format. Must be a number."
-            products = []
+            return render_template('product_display.html',
+                                   error="Invalid product ID")
+    return render_template('product_display.html', products=products_list)
 
-    return render_template(
-        "product_display.html",
-        products=products,
-        error=error
-    )
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
 
 
 if __name__ == '__main__':
